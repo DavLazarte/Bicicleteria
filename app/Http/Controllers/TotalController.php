@@ -166,8 +166,8 @@ class TotalController extends Controller
             $totals=DB::table('totals as t')
             ->join('detalle_totals as dt', 'dt.idtotal','=', 't.id')
             ->join('sucursals as s', 's.id','=', 'dt.negocio')
-            ->select('dt.id','dt.idtotal','dt.negocio','dt.efectivo','dt.tarjeta','dt.sub_total','s.nombre')
-            ->where('t.fecha','=', $fecha )
+            ->select('dt.id','dt.idtotal','dt.negocio','dt.efectivo','dt.tarjeta','dt.sub_total','s.nombre','t.fecha')
+            ->orwhere('t.fecha','=', $fecha )
             ->where('dt.negocio','=', $nego )
             ->where('t.estado','=','Activo')
             ->get();
@@ -242,9 +242,9 @@ class TotalController extends Controller
     $registros=DB::table('totals as t')
     ->join('detalle_totals as dt', 'dt.idtotal','=', 't.id')
     ->join('sucursals as s', 's.id','=', 'dt.negocio')
-    ->select('dt.id','dt.idtotal','dt.negocio','dt.efectivo','dt.tarjeta','dt.sub_total','s.nombre')
+    ->select('dt.id','dt.idtotal','dt.negocio','dt.efectivo','dt.tarjeta','dt.sub_total','s.nombre','t.fecha','dt.negocio','t.estado')
     ->where('t.fecha','=', $fecha )
-    ->where('dt.negocio','=', $nego )
+    ->orwhere('dt.negocio','=', $nego )
     ->where('t.estado','=','Activo')
     ->get();
 

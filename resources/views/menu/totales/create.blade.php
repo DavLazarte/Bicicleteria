@@ -22,7 +22,7 @@
                 <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
                     <div class="form-group">
                         <label>Negocio</label>
-                        <select name="pidsucursal" class="form-control selectpicker" id="pidsucursal" data-live-search="true">
+                        <select name="pidsucursal" class="form-control selectpicker" id="pidsucursal" data-live-search="true" title="ELegir Local">
                             @foreach($sucursales as $suc)
                             <option value="{{$suc->id}}_{{$suc->nombre}}">{{$suc->nombre}}</option>
                             @endforeach

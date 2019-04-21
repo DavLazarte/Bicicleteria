@@ -113,11 +113,11 @@
             <li class="treeview">
               <a href="">
                 <i class="fa fa-file-text-o"></i>
-                <span>Reportes</span>
+                <span>Movimientos</span>
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{{url('reportes')}}"><i class="fa fa-circle-o"></i>Locales</a></li>
+                <li><a href="{{url('reportes')}}"><i class="fa fa-circle-o"></i>Reportes</a></li>
               </ul>
             </li>
              <li class="treeview">
