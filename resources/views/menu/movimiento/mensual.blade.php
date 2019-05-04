@@ -2,7 +2,7 @@
 @section('contenido')
 <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-        <h3>Generar Reportes de Totales</h3>
+        <h3>Generar Reportes Por Mes</h3>
             @if (count($errors)>0)
             <div class="alert alert-danger">
                 <ul>
@@ -14,37 +14,32 @@
             @endif
     </div>
 </div>
-{!! Form::open(array('url'=>'reportes','method'=>'GET','autocomplete'=>'off','role'=>'search')) !!}
+{!! Form::open(array('url'=>'reportemes','method'=>'GET','autocomplete'=>'off','role'=>'search')) !!}
 <div class="row">
-{{-- <input type="text" class="form-control" name="zona" placeholder="Ingresar la Zona" value="{{$zona}}"> --}}
-    <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12"> 
+    <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
         <div class="form-group">
-            <label for="local">Local </label>
-            <select name="nego" id="cliente" class="form-control selectpicker" data-live-search="true" title="Elegir Local">
-                @foreach($local as $loc)
-                  <option value="{{$loc->id}}">{{$loc->nombre}}</option>
-                @endforeach
+            <label for="mes">Mes</label> 
+            <select  class="form-control" name="mes">
+                    <option value="0">Elegir Mes</option>
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
             </select>
         </div>
     </div>
-    <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
-        <div class="form-group">
-           <label for="fecha">Fecha</label> 
-        <input type="date" class="form-control" name="fecha" value="{{$fecha}}">
-        </div>
-    </div>
-    {{-- <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
-        <div class="form-group">
-             <label for="credito">Credito</label> 
-        <input type="text" class="form-control" name="credito" value="0">
-        </div>
-    </div> --}}
     <div class="col-lg-3 col-sm-3 col-md-3 col-xs-12">
         <div class="form-group">
             <label for=" "> </label>
             <button type="submit" class="btn btn-primary form-control">Buscar</button>
-            {{-- <span class="input-group-btn">
-            </span> --}}
         </div>
     </div>
 </div>
@@ -60,7 +55,7 @@
 					<th>Efectivo</th>
 					<th>Tarjeta</th>
 					<th>Subtotal</th>
-				</thead>
+                </thead>
                 @foreach ($totals as $tot)
 				<tr>
                     <td>{{ $tot->id}}</td>
@@ -69,7 +64,8 @@
 					<td>{{ $tot->negocio.'-'.$tot->nombre}}</td>
 					<td>{{ $tot->efectivo}}</td>
 					<td>{{ $tot->tarjeta}}</td>
-					<td>{{ $tot->sub_total}}</td>
+                    <td>{{ $tot->sub_total}}</td>
+                    
                 </tr>
 				@endforeach
 			</table>
@@ -79,7 +75,7 @@
 {{Form::close()}}
 <div class="col-lg-3 col-sm-3 col-md-3 col-xs-12">
     <div class="form-group">
-      <a href="{{url('reportelocal',[$nego,$fecha])}}" target="_blank"><button title="Reporte" class="btn btn-warning"><i class="fa fa-print" aria-hidden="true"></i></button></a>
+      <a href="{{url('reportem',$mes)}}" target="_blank"><button title="Reporte" class="btn btn-warning"><i class="fa fa-print" aria-hidden="true"></i></button></a>
     </div>
 </div>
 @endsection

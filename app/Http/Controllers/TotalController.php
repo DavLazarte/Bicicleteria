@@ -13,6 +13,7 @@ use DB;
 use Response;
 use Illuminate\Support\Collection;
 use Fpdf;
+Use Carbon\Carbon;
 
 class TotalController extends Controller
 {
@@ -174,6 +175,26 @@ class TotalController extends Controller
             return view('menu.movimiento.totales',compact('local','totals','fecha','nego'));
         }
     }
+    public function vistameses(Request $request)
+    {
+        if ($request)
+        {
+            $local  = Sucursal::where('estado','=','Activa')->get();
+            // $fecha  = trim($request->get('fecha'));
+            // $tipo   = trim($request->get('tipo'));
+            $mes   = trim($request->get('mes'));
+            $totals=DB::table('totals as t')
+            ->join('detalle_totals as dt', 'dt.idtotal','=', 't.id')
+            ->join('sucursals as s', 's.id','=', 'dt.negocio')
+            ->select('dt.id','dt.idtotal','dt.negocio','dt.efectivo','dt.tarjeta','dt.sub_total','s.nombre','t.fecha')
+            ->whereMonth('t.fecha','=', $mes)
+            ->whereYear('t.fecha','=', date('Y'))
+        //  ->where('dt.negocio','=', $nego )
+            ->where('t.estado','=','Activo')
+            ->get();
+            return view('menu.movimiento.mensual',compact('local','totals','mes'));
+        }
+    }
     public function reportec($id){
         //Obtengo los datos
         $total=DB::table('totals')
@@ -243,8 +264,8 @@ class TotalController extends Controller
     ->join('detalle_totals as dt', 'dt.idtotal','=', 't.id')
     ->join('sucursals as s', 's.id','=', 'dt.negocio')
     ->select('dt.id','dt.idtotal','dt.negocio','dt.efectivo','dt.tarjeta','dt.sub_total','s.nombre','t.fecha','dt.negocio','t.estado')
-    ->where('t.fecha','=', $fecha )
-    ->orwhere('dt.negocio','=', $nego )
+    ->orwhere('t.fecha','=', $fecha )
+    ->where('dt.negocio','=', $nego )
     ->where('t.estado','=','Activo')
     ->get();
 
@@ -279,6 +300,63 @@ class TotalController extends Controller
        $pdf::cell(40,6,utf8_decode($reg->sub_total),1,"","L",true);
        $pdf::Ln(); 
     }
+    $pdf::Output();
+    exit;
+ }
+ public function reportme($mes){
+    //Obtenemos los registros
+    $registros=DB::table('totals as t')
+    ->join('detalle_totals as dt', 'dt.idtotal','=', 't.id')
+    ->join('sucursals as s', 's.id','=', 'dt.negocio')
+    ->select('dt.id','dt.idtotal','dt.negocio','dt.efectivo','dt.tarjeta','dt.sub_total','s.nombre','t.fecha','dt.negocio','t.estado')
+    ->whereMonth('t.fecha','=', $mes)
+    ->whereYear('t.fecha','=', date('Y'))
+    ->where('t.estado','=','Activo')
+    ->get();
+
+    $pdf = new Fpdf();
+    $pdf::AddPage();
+    $pdf::SetTextColor(35,56,113);
+    $pdf::SetFont('Arial','B',11);
+    $pdf::Cell(0,10,utf8_decode("Totales mes de: ".$mes),0,"","C");
+    $pdf::Ln();
+    $pdf::Ln();
+    $pdf::SetTextColor(0,0,0);  // Establece el color del texto 
+    $pdf::SetFillColor(206, 246, 245); // establece el color del fondo de la celda 
+    $pdf::SetFont('Arial','B',14); 
+    //El ancho de las columnas debe de sumar promedio 190
+
+    // $pdf::cell(25,8,utf8_decode("Fecha"),1,"","L",true);
+    $pdf::cell(50,8,utf8_decode("Local"),1,"","L",true);
+    $pdf::cell(40,8,utf8_decode("Efectivo"),1,"","L",true);
+    $pdf::cell(40,8,utf8_decode("Tarjeta"),1,"","L",true);
+    $pdf::cell(40,8,utf8_decode("Subtotal"),1,"","L",true);
+    
+    $pdf::Ln();
+    $pdf::SetTextColor(0,0,0);  // Establece el color del texto 
+    $pdf::SetFillColor(255, 255, 255); // establece el color del fondo de la celda
+    $pdf::SetFont("Arial","",14);
+    $totalefectivo=0;
+    $totaltarjeta=0;
+    $totalgeneral=0;
+    foreach ($registros as $reg)
+    {
+       $pdf::cell(50,6,utf8_decode($reg->negocio.'-'.$reg->nombre),1,"","L",true);
+       $pdf::cell(40,6,utf8_decode($reg->efectivo),1,"","L",true);
+       $pdf::cell(40,6,utf8_decode($reg->tarjeta),1,"","L",true);
+       $pdf::cell(40,6,utf8_decode($reg->sub_total),1,"","L",true);
+       $totalefectivo=$totalefectivo + $reg->efectivo;
+       $totaltarjeta=$totaltarjeta + $reg->tarjeta;
+       $totalgeneral=$totalgeneral + $reg->sub_total;
+       $pdf::Ln(); 
+    }
+    $pdf::SetTextColor(255, 255, 255);  // Establece el color del texto 
+    $pdf::SetFillColor(24, 106, 59); // establece el color del fondo de la celda
+    $pdf::SetFont("Arial","",14);
+    $pdf::cell(50,8,utf8_decode("Totales"),1,"","L",true);
+    $pdf::cell(40,8,utf8_decode($totalefectivo),1,"","L",true);
+    $pdf::cell(40,8,utf8_decode($totaltarjeta),1,"","L",true);
+    $pdf::cell(40,8,utf8_decode($totalgeneral),1,"","L",true);
     $pdf::Output();
     exit;
  }

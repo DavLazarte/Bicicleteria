@@ -23,4 +23,6 @@ Route::auth();
 Route::get('/home', 'HomeController@index');
 Route::get('reportotales/{id}', 'TotalController@reportec');
 Route::get('reportes', 'TotalController@vistatotales');
+Route::get('reportemes', 'TotalController@vistameses');
 Route::get('reportelocal/{nego}/{fecha}', 'TotalController@reportlo');
+Route::get('reportem/{mes}', 'TotalController@reportme');

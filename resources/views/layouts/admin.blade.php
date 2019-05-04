@@ -117,7 +117,8 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li><a href="{{url('reportes')}}"><i class="fa fa-circle-o"></i>Reportes</a></li>
+                <li><a href="{{url('reportes')}}"><i class="fa fa-circle-o"></i>Totales</a></li>
+                <li><a href="{{url('reportemes')}}"><i class="fa fa-circle-o"></i>Mensual</a></li>
               </ul>
             </li>
              <li class="treeview">
