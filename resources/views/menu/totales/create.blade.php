@@ -16,7 +16,7 @@
 </div>
         {!!Form::open(array('url'=>'menu/recaudacion','method'=>'POST','autocomplete'=>'off'))!!}
         {{Form::token()}}
-    <div class="row">
+<div class="row">
         <div class="panel panel-primary">
             <div class="panel-body">
                 <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
